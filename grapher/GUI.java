@@ -9,6 +9,11 @@ public class GUI extends javax.swing.JPanel {
     public static Color
         BACKGROUND_COLOR = Color.BLACK,
         TEXT_COLOR = Color.WHITE;
+    public static float
+        RANGEX = 120,
+        RANGEY = 120;
+    public static int
+        POINTSIZE = 2;
     ArrayList<Point> data;
     float w, h;
     public GUI(int width, int height) {
@@ -47,13 +52,26 @@ public class GUI extends javax.swing.JPanel {
     public void paint(Graphics graphics) {
         Graphics2D g = (Graphics2D)graphics;
         clear(g);
-        g.setColor(c[(i++) % 3]);
-        fillRect(g, 0.25f, 0.25f, 0.5f, 0.5f);
+        for (Point p : data) {
+            g.setColor(c[(i++) % 3]);
+            drawPoint(g, p);
+        }
     }
     
     private void clear(Graphics2D g) {
         g.setColor(BACKGROUND_COLOR);
         fillRect(g, 0, 0, 1, 1);
+    }
+    
+    private void drawPoint(Graphics2D g, Point p) {
+        int width = POINTSIZE * Math.max(1, (int)(this.w / this.h)),
+            height = POINTSIZE * Math.max(1, (int)(this.h / this.w));
+        g.fillOval(
+            (int)(p.x / RANGEX * this.w) - height / 2,
+            (int)(this.h - p.y / RANGEY * this.h) - width / 2,
+            width,
+            height
+        );
     }
     
     private void fillRect(Graphics2D g, float x, float y, float w, float h) {

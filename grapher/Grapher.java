@@ -102,8 +102,18 @@ public class Grapher {
                 gui.setData(data);
 
                 //  OUTPUT PHASE        //
-
-                gui.repaint();
+                
+                while (true) {
+                    synchronized(gui) {
+                        try {
+                            gui.wait();
+                        }
+                        catch (InterruptedException e) {
+                            gui.repaint();
+                            break;
+                        }
+                    }
+                }
                 
                 //  Don't start the next loop until ready
                 try {
