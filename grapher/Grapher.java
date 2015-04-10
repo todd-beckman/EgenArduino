@@ -1,5 +1,6 @@
 package grapher;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
@@ -8,25 +9,23 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+import javax.swing.Timer;
+//import javax.swing.TimerTask;
 
 public class Grapher {
 
     public static int
             WIDTH = 800,
-            HEIGHT = 600;
+            HEIGHT = 600,
+            INTERVAL = 500;
     public static String
             FILENAME = "data.csv";
-    public static long
-            DELAY = 100l,
-            INTERVAL = 32l;
 
     public static void main(String[] args) {
 
         //  INITIALIZE PHASE    //
         //  Prepare the window
-        java.awt.Frame frame = new java.awt.Frame("Grapher");
+        javax.swing.JFrame frame = new javax.swing.JFrame("Grapher");
         frame.setSize(WIDTH, HEIGHT);
         frame.setResizable(true);
 
@@ -61,20 +60,14 @@ public class Grapher {
         frame.setVisible(true);
         
         //  Set up a timer
-        
-        java.util.Timer t = new Timer();
-        t.scheduleAtFixedRate(
-            new TimerTask() {
-                @Override
-                public void run() {
-                    synchronized(frame) {
-                        frame.notifyAll();
-                    }
-                }
-            },
-            DELAY,
-            INTERVAL
-        );
+        Timer t = new Timer(INTERVAL, (ActionEvent ae) -> {
+            
+            //  Allow the loop to proceed
+            synchronized(frame) {
+                frame.notifyAll();
+            }
+        });
+        t.start();
 
         //  Prepare for the loop
         BufferedReader file;
@@ -112,6 +105,7 @@ public class Grapher {
 
                 gui.repaint();
                 
+                //  Don't start the next loop until ready
                 try {
                     frame.wait();
                 }
