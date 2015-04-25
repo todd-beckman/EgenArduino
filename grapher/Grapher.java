@@ -17,7 +17,7 @@ public class Grapher {
     public static int
             WIDTH = 800,
             HEIGHT = 600,
-            INTERVAL = 500;
+            INTERVAL = 100;
     public static String
             FILENAME = "data.csv";
 
@@ -74,8 +74,11 @@ public class Grapher {
         ArrayList<Point> data = new ArrayList();
         synchronized(frame) {
             while (true) {
+                int maxx = 0,
+                    maxy = 0;
 
                 //  GET INPUT PHASE     //
+                
                 data.clear();
                 try {
                     file = new BufferedReader(new FileReader(FILENAME));
@@ -86,9 +89,17 @@ public class Grapher {
                             System.out.println("Improperly formatted CSV.");
                             System.exit(0);
                         }
+                        float dep = Float.parseFloat(values[0]);
+                        float ind = Float.parseFloat(values[1]);
+                        maxx =
+                                Math.max((int)GUI.RANGEX,
+                                Math.max(maxx, (int)dep));
+                        maxy =
+                                Math.max((int)GUI.RANGEY,
+                                Math.max(maxy, (int)ind));
                         data.add(new Point(
-                                Float.parseFloat(values[0]),
-                                Float.parseFloat(values[1])
+                                dep,
+                                ind
                         ));
                     }
                     file.close();
@@ -102,18 +113,13 @@ public class Grapher {
                 gui.setData(data);
 
                 //  OUTPUT PHASE        //
+
+                //  Update the range in case it changed
+                GUI.RANGEX = maxx;
+                GUI.RANGEY = maxy;
                 
-                while (true) {
-                    synchronized(gui) {
-                        try {
-                            gui.wait();
-                        }
-                        catch (InterruptedException e) {
-                            gui.repaint();
-                            break;
-                        }
-                    }
-                }
+                //  Render
+                gui.repaint();
                 
                 //  Don't start the next loop until ready
                 try {

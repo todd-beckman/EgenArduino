@@ -10,10 +10,10 @@ public class GUI extends javax.swing.JPanel {
         BACKGROUND_COLOR = Color.BLACK,
         TEXT_COLOR = Color.WHITE;
     public static float
-        RANGEX = 120,
-        RANGEY = 120;
+        RANGEX = 10,
+        RANGEY = 100;
     public static int
-        POINTSIZE = 2;
+        POINTSIZE = 5;
     ArrayList<Point> data;
     float w, h;
     public GUI(int width, int height) {
@@ -64,11 +64,11 @@ public class GUI extends javax.swing.JPanel {
     }
     
     private void drawPoint(Graphics2D g, Point p) {
-        int width = POINTSIZE * Math.max(1, (int)(this.w / this.h)),
-            height = POINTSIZE * Math.max(1, (int)(this.h / this.w));
+        int width = this.h < 0.01f ? 1 : POINTSIZE * Math.max(1, (int)(this.w / this.h)),
+            height = this.w < 0.01f ? 1 : POINTSIZE * Math.max(1, (int)(this.h / this.w));
         g.fillOval(
-            (int)(p.x / RANGEX * this.w) - height / 2,
-            (int)(this.h - p.y / RANGEY * this.h) - width / 2,
+            (int)(p.x / RANGEX * this.w) - width / 2,
+            (int)(this.h - p.y / RANGEY * this.h) - height / 2,
             width,
             height
         );
