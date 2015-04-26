@@ -114,10 +114,14 @@ public class Grapher {
     }
     
     /**
-     * Converts the point and adds it to the list
-     * @param p The point to add (float, float)
+     * Take data input, parse it, and then add it to the graph
+     * @param input The data to parse
      */
-    public static void addPoint(Point p) {
+    public static void parseData(String input) {
+        //  I have no clue how to parse this without the thingy
+        //  Well I do have a clue- REGEX. But, I still don't have
+        //  the thingy so I can't do anything for sure.
+        Point p = new Point(0, 0);
         gui.addPoint(newPoint(p));
     }
 }
