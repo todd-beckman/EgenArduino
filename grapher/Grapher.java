@@ -1,9 +1,6 @@
 package grapher;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -52,6 +49,17 @@ public class Grapher {
             @Override
             public void windowClosing(WindowEvent we) {
                 System.exit(0);
+            }
+        });
+        
+        frame.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_S:
+                        
+                        break;
+                }
             }
         });
 
