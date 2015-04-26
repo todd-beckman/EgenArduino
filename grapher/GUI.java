@@ -14,7 +14,7 @@ public class GUI extends javax.swing.JPanel {
         RANGEY = 100;
     public static int
         POINTSIZE = 5;
-    ArrayList<Point> data;
+    public ArrayList<Point> data;
     float w, h;
     public GUI(int width, int height) {
         w = (float)width;
@@ -40,6 +40,18 @@ public class GUI extends javax.swing.JPanel {
      */
     public void setData(ArrayList<Point> data) {
         this.data = data;
+        repaint();
+    }
+    
+    /**
+     * Adds a point to the graph
+     * @param p 
+     */
+    public void addPoint(Point p) {
+        data.add(p);
+        RANGEX = Math.max(RANGEX, p.x);
+        RANGEY = Math.max(RANGEY, p.y);
+        repaint();
     }
     
     Color[] c = {
