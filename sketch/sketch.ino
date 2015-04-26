@@ -1,14 +1,16 @@
+#include <Time.h>
 #include <Servo.h>
+
 
 int framedelay = 1000;
 
 int servopos = 0;
 int servopin = 5;
-
 Servo servo;
 
 int buttonpin = 8;
 int clockwise = 0;
+time_t start = now();
 
 void setup() {
   Serial.begin(9600);
@@ -42,11 +44,10 @@ void loop() {
   }
   
   //output
-    //print out the analog read to serial
-  Serial.print("Analog says: ");
-  Serial.println(analog0);
-  //print out the voltage read to serial
-  Serial.print("Voltage says: ");
+  time_t present = now();
+  time_t elapsed = present - start;
+  Serial.print(elapsed);
+  Serial.print(",");
   Serial.println(analog1 * (5.0 / 1023.0));
   delay(framedelay);
 }

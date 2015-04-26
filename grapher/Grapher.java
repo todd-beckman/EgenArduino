@@ -13,15 +13,14 @@ import javax.swing.JFrame;
 public class Grapher {
     //  Everything is static so all the communicatey things work
     //  Tradeoff of elegant versus speedcoding
-    public static int
+    private static final int
             WIDTH = 800,
-            HEIGHT = 600,
-            INTERVAL = 100;
-    public static String
+            HEIGHT = 600;
+    private static final String
             FILENAME = "data.csv";
-    public static JFrame frame;
-    public static ArrayList<Point> data;
-    public static GUI gui;
+    private static JFrame frame;
+    private static ArrayList<Point> data;
+    private static GUI gui;
     
     public static void main(String[] args) {
         //  Prepare the window

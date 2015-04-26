@@ -103,6 +103,7 @@ public class SerialTest implements SerialPortEventListener {
                 String inputLine=input.readLine();
                 System.out.println(inputLine);
                 //  The only change I made
+                //  
                 grapher.Grapher.parseData(inputLine);
                 //  That is all
             } catch (Exception e) {
