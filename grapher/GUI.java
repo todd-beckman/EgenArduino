@@ -11,7 +11,7 @@ public class GUI extends javax.swing.JPanel {
         TEXT_COLOR = Color.BLACK;
     public static float
         RANGEX = 10,
-        RANGEY = 100;
+        RANGEY = 5;
     public static int
         LABELPADDING = 30,
         POINTSIZE = 5;
@@ -51,7 +51,7 @@ public class GUI extends javax.swing.JPanel {
     public void addPoint(Point p) {
         data.add(p);
         RANGEX = Math.max(RANGEX, p.x);
-        RANGEY = Math.max(RANGEY, p.y);
+        //RANGEY = Math.max(RANGEY, p.y);
         repaint();
     }
     /**
@@ -72,16 +72,14 @@ public class GUI extends javax.swing.JPanel {
         Color.BLUE,
     };
     int i = 0;
-    float amaxx, amaxy;
     @Override
     public void paint(Graphics graphics) {
-        amaxx = RANGEX - LABELPADDING;
-        amaxy = RANGEY - LABELPADDING;
         Graphics2D g = (Graphics2D)graphics;
         clear(g);
         g.setColor(TEXT_COLOR);
         g.drawLine(0, (int)this.h - LABELPADDING, (int)this.w, (int)this.h - LABELPADDING);
         g.drawLine(LABELPADDING, 0, LABELPADDING, (int)this.h);
+        i %= 3;
         for (Point p : data) {
             g.setColor(c[(i++) % 3]);
             drawPoint(g, p);
@@ -94,13 +92,12 @@ public class GUI extends javax.swing.JPanel {
     }
     
     private void drawPoint(Graphics2D g, Point p) {
-        int width = this.h < 0.01f ? 1 : POINTSIZE * Math.max(1, (int)(this.w / this.h)),
-            height = this.w < 0.01f ? 1 : POINTSIZE * Math.max(1, (int)(this.h / this.w));
-        int x = LABELPADDING + (int)(p.x / amaxx * this.w) - width / 2;
-        int y = LABELPADDING + (int)(this.h - p.y / amaxy * this.h) + height / 2;
-        g.fillOval(x, y, width, height);
-        g.drawString("" + p.x, x - width / 2, (int)this.h - LABELPADDING + height / 2);
-        g.drawString("" + p.y, 0, y + height / 2);
+        float px = (p.x < 0.001f ? 0.001f : p.x);
+        float py = (p.y < 0.001f ? 0.001f : p.y);
+        int x = (int)(px / RANGEX * this.w) + LABELPADDING;
+        int y = (int)(this.h - py / RANGEY * this.h) - LABELPADDING;
+        g.fillOval(x, y, 1, 1);
+        g.drawString("" + p.y, x, y);
     }
     
     private void fillRect(Graphics2D g, float x, float y, float w, float h) {

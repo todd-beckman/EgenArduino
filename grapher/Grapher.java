@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
@@ -18,6 +19,9 @@ public class Grapher {
     private static JFrame frame;
     private static ArrayList<Point> data;
     private static GUI gui;
+    
+    private static BufferedReader infile;
+    private static PrintWriter outfile;
     
     public static void main(String[] args) {
         //  Prepare the window
@@ -57,7 +61,14 @@ public class Grapher {
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_S:
-                        
+                        try {
+                            outfile = new PrintWriter("data.csv");
+                            outfile.print(gui.stringify());
+                            outfile.close();
+                        }
+                        catch (IOException ex) {
+                            System.out.println("Failed to print to output file.");
+                        }
                         break;
                 }
             }
@@ -66,14 +77,13 @@ public class Grapher {
         //  Make the window appear
         frame.setVisible(true);
         
-        BufferedReader file;
         data = new ArrayList();
-        int maxx = 0,
+        float maxx = 0,
             maxy = 0;
         try {
-            file = new BufferedReader(new FileReader(FILENAME));
-            while (file.ready()) {
-                String line = file.readLine();
+            infile = new BufferedReader(new FileReader(FILENAME));
+            while (infile.ready()) {
+                String line = infile.readLine();
                 String[] values = line.split(",");
                 if (values.length != 2) {
                     System.out.println("Improperly formatted CSV.");
@@ -81,21 +91,18 @@ public class Grapher {
                 }
                 float dep = Float.parseFloat(values[0]);
                 float ind = Float.parseFloat(values[1]);
-                maxx =
-                    Math.max((int)GUI.RANGEX,
-                    Math.max(maxx, (int)dep));
-                maxy =
-                    Math.max((int)GUI.RANGEY,
-                    Math.max(maxy, (int)ind));
+                maxx = Math.max(GUI.RANGEX, Math.max(maxx, dep));
+                maxy = Math.max(GUI.RANGEY, Math.max(maxy, ind));
                 data.add(newPoint(new Point(dep, ind)));
             }
-            file.close();
+            infile.close();
         } catch (IOException e) {
             System.out.println("No file to read from. Starting from nothing...");
         }
+        System.out.println("Added " + data.size() + " points.");
         //  Update the range in case it changed
         GUI.RANGEX = maxx;
-        GUI.RANGEY = maxy;
+        //GUI.RANGEY = maxy;
 
         //  Assigns and renders
         gui.setData(data);
@@ -125,10 +132,11 @@ public class Grapher {
      * @param input The data to parse
      */
     public static void parseData(String input) {
-        //  I have no clue how to parse this without the thingy
-        //  Well I do have a clue- REGEX. But, I still don't have
-        //  the thingy so I can't do anything for sure.
-        Point p = new Point(0, 0);
-        gui.addPoint(newPoint(p));
+        String[] split = input.split(",");
+        float time = Float.parseFloat(split[0]);
+        float salinity = Float.parseFloat(split[1]);
+        float temperature = Float.parseFloat(split[2]);
+        System.out.println("Time: " + time + "s. Salinity: " + salinity + ". Temperature: " + temperature + "C.");
+        gui.addPoint(newPoint(new Point(time, salinity)));
     }
 }
